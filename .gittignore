@@ -1,0 +1,25 @@
+# Ignore Python byte code files
+__pycache__/
+
+# Ignore environment-specific files
+.env
+
+# Ignore any built distribution files
+*.egg-info/
+dist/
+build/
+
+# Ignore local development files
+*.sqlite3
+*.log
+
+# Ignore Python cache files
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore system-specific logs and files
+sysinfo/
