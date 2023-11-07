@@ -1,6 +1,8 @@
 import random
 import statistics
 import matplotlib.pyplot as plt
+import json 
+import os
 
 tracks_2022 = [
     {"name": "Albert Park Circuit", "length": "5.303 km", "laps": 58},
@@ -246,3 +248,22 @@ def simulate_race(track_length, laps, selected_track):
 
 race_laps = selected_track["laps"]
 race_results = simulate_race(track_length, race_laps, selected_track)
+
+race_data = {
+    "track": selected_track["name"],
+    "track_length": track_length,
+    "average_speed": average_speed,
+    "qualifying_results": qualifying_results,
+    "race_results": race_results
+}
+
+data_folder = os.path.join(os.path.dirname(__file__), '..', 'data')
+if not os.path.exists(data_folder):
+    os.makedirs(data_folder)
+json_file_path = os.path.join(data_folder, 'race_results.json')
+with open(json_file_path, 'w') as json_file:
+    json.dump(race_data, json_file, indent=4)
+
+print("Yarış sonuçları JSON dosyası 'data' klasörü içine kaydedildi:", json_file_path)
+
+
