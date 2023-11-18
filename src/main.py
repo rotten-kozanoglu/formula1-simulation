@@ -143,7 +143,9 @@ class RaceSimulator:
 
             for driver_result in starting_grid:
                 driver_name = driver_result["driver_name"]
-                base_lap_time = (track.length / 206) * 3600
+                tire_deg_factor = random.uniform(0.98, 1.02)
+                fuel_load_factor = 1 - (lap / laps) * 0.04
+                base_lap_time = (track.length / 206) * 3600 * tire_deg_factor * fuel_load_factor
 
                 driver_attributes = next((d for d in self.drivers if d.name == driver_name), None)
                 if driver_attributes:
@@ -219,7 +221,7 @@ if __name__ == "__main__":
         Track("Marina Bay Street Circuit", "5.063 km", 61),
         Track("Red Bull Ring", "4.318 km", 71),
         Track("Silverstone Circuit", "5.891 km", 52),
-        Track("Sochi Autodrom", "5.848 km", 53),
+         Track("Sochi Autodrom", "5.848 km", 53),
         Track("Suzuka Circuit", "5.807 km", 53),
         Track("Yas Marina Circuit", "5.554 km", 58),
     ]
@@ -257,7 +259,7 @@ if __name__ == "__main__":
     race_data = {
         "track": selected_track.name,
         "track_length": selected_track.length,
-        "average_speed": 206,
+        "average_speed": 210,
         "qualifying_results": qualifying_results,
         "race_results": race_results
     }
