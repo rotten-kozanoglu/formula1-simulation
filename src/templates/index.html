@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Simulator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a;
+            color: #fff;
+            margin: 20px;
+        }
+
+        h1, h2 {
+            color: #ffd700;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li:nth-child(even) {
+            background-color: #292929;
+        }
+
+        .lap-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            flex-basis: 15%;
+            color: #ffd700;
+        }
+
+        .driver-name {
+            font-size: 1.2em;
+            color: #fff;
+            flex-basis: 50%;
+        }
+
+        .lap-time {
+            font-size: 1.2em;
+            color: #ddd;
+            flex-basis: 30%;
+        }
+
+        .winner {
+            background-color: #ccb800;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Race Results</h1>
+    <p>Track: {{ track.name }}</p>
+    <p>Track Length: {{ track.length }} km</p>
+    <p class="winner">Winner: {{ race_results[-1][0]['driver_name'] }}</p>
+
+    <h2>Race Results</h2>
+    <ul>
+        {% for lap in race_results %}
+            <li class="{% if loop.index == 1 %}winner{% endif %}">
+                <span class="lap-number">Lap {{ loop.index }}</span>
+                <span class="driver-name">{{ lap[0].driver_name }}</span>
+                <span class="lap-time">{{ lap[0].lap_time | format_lap_time }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Add images from the static folder -->
+    <img src="{{ url_for('static', filename='practice_results.png') }}" alt="Practice Results">
+    <img src="{{ url_for('static', filename='qualifying_results.png') }}" alt="Qualifying Results">
+</body>
+</html>

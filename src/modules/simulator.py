@@ -201,73 +201,13 @@ class RaceSimulator:
         return race_results
 
     def save_race_data(self, race_data, file_path):
+        static_folder = os.path.join(os.path.dirname(__file__), 'static')
+        if not os.path.exists(static_folder):
+            os.makedirs(static_folder)
+
         with open(file_path, 'w') as json_file:
             json.dump(race_data, json_file, indent=4)
 
+        self.save_practice_results_plot(os.path.join(static_folder, 'practice_results.png'))
+        self.save_qualifying_results_plot(os.path.join(static_folder, 'qualifying_results.png'))
 
-
-if __name__ == "__main__":
-    tracks = [
-        Track("Albert Park Circuit", "5.303 km", 58),
-        Track("Baku City Circuit", "6.003 km", 51),
-        Track("Buddh International Circuit", "5.125 km", 60),
-        Track("Circuit de Barcelona-Catalunya", "4.675 km", 66),
-        Track("Circuit de Monaco", "3.337 km", 78),
-        Track("Circuit Gilles Villeneuve", "4.361 km", 70),
-        Track("Circuit Paul Ricard", "5.842 km", 53),
-        Track("Hockenheimring", "4.574 km", 67),
-        Track("Hungaroring", "4.381 km", 70),
-        Track("Istanbul Park Circuit", "5.338 km", 58),
-        Track("Marina Bay Street Circuit", "5.063 km", 61),
-        Track("Red Bull Ring", "4.318 km", 71),
-        Track("Silverstone Circuit", "5.891 km", 52),
-         Track("Sochi Autodrom", "5.848 km", 53),
-        Track("Suzuka Circuit", "5.807 km", 53),
-        Track("Yas Marina Circuit", "5.554 km", 58),
-    ]
-
-    drivers = [
-        Driver("Lewis Hamilton", "Mercedes", 8.3, 9.4),
-        Driver("George Russell", "Mercedes", 8.4, 9.1),
-        Driver("Max Verstappen", "Red Bull Racing", 9.8, 9.8),
-        Driver("Sergio Perez", "Red Bull Racing", 8.2, 9.5),
-        Driver("Charles Leclerc", "Ferrari", 8.7, 8.6),
-        Driver("Carlos Sainz", "Ferrari", 8.4, 8.4),
-        Driver("Lando Norris", "McLaren", 8.9, 8.7),
-        Driver("Oscar Piastri", "McLaren", 7.8, 8.1),
-        Driver("Pierre Gasly", "Alpine", 8.1, 8.0),
-        Driver("Esteban Ocon", "Alpine", 8.3, 7.9),
-        Driver("Fernando Alonso", "Aston Martin", 8.6, 7.8),
-        Driver("Lance Stroll", "Aston Martin", 7.9, 7.6),
-        Driver("Alex Albon", "Williams", 8.0, 7.5),
-        Driver("Logan Sargeant", "Williams", 7.5, 7.3),
-        Driver("Kevin Magnussen", "Haas", 7.2, 7.1),
-        Driver("Nico Hülkenberg", "Haas", 7.0, 6.9),
-        Driver("Valtteri Bottas", "Alfa Romeo", 8.5, 7.7),
-        Driver("Guanyu Zhou", "Alfa Romeo", 7.7, 7.4),
-        Driver("Yuki Tsunoda", "AlphaTauri", 8.2, 8.2),
-        Driver("Daniel Ricciardo", "AlphaTauri", 8.8, 8.5),        
-    ]
-
-    race_simulator = RaceSimulator(tracks, drivers)
-
-    selected_track = random.choice(tracks)
-    race_simulator.simulate_practice(selected_track)
-    qualifying_results = race_simulator.simulate_qualifying(selected_track)
-    race_results = race_simulator.simulate_race(selected_track, selected_track.laps)
-
-    race_data = {
-        "track": selected_track.name,
-        "track_length": selected_track.length,
-        "average_speed": 210,
-        "qualifying_results": qualifying_results,
-        "race_results": race_results
-    }
-
-    data_folder = os.path.join(os.path.dirname(__file__), '..', 'data')
-    if not os.path.exists(data_folder):
-        os.makedirs(data_folder)
-    json_file_path = os.path.join(data_folder, 'race_results.json')
-    race_simulator.save_race_data(race_data, json_file_path)
-
-    print("Yarış sonuçları JSON dosyası 'data' klasörü içine kaydedildi:", json_file_path)
