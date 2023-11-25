@@ -11,6 +11,7 @@ This project simulates Formula 1 races, including practice sessions, qualifying,
 **Technologies:**
 - Python
 - Matplotlib
+- Flask
 
 **Purpose:**
 The project is created for Formula 1 enthusiasts and those interested in simulations and data analysis. It provides an opportunity to experience the excitement of Formula 1 racing in a virtual environment.
