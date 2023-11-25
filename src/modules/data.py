@@ -22,8 +22,8 @@ tracks = [
 drivers = [
         Driver("Lewis Hamilton", "Mercedes", 8.3, 9.4),
         Driver("George Russell", "Mercedes", 8.4, 9.1),
-        Driver("Max Verstappen", "Red Bull Racing", 9.8, 9.8),
-        Driver("Sergio Perez", "Red Bull Racing", 8.2, 9.5),
+        Driver("Max Verstappen", "Red Bull", 9.8, 9.8),
+        Driver("Sergio Perez", "Red Bull", 8.2, 9.5),
         Driver("Charles Leclerc", "Ferrari", 8.7, 8.6),
         Driver("Carlos Sainz", "Ferrari", 8.4, 8.4),
         Driver("Lando Norris", "McLaren", 8.9, 8.7),

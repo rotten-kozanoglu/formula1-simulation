@@ -1,94 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Race Simulator</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #1a1a1a;
-            color: #fff;
-            margin: 20px;
-        }
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #1a1a1a;
+        color: #fff;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-        h1, h2 {
-            color: #ffd700;
-        }
+      h1,
+      h2 {
+        color: #ffd700;
+        text-align: center;
+      }
 
-        p {
-            margin-bottom: 10px;
-        }
+      p {
+        margin-bottom: 10px;
+      }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        width: 80%;
+      }
 
-        li {
-            background-color: #333;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      li {
+        background-color: #333;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-        li:nth-child(even) {
-            background-color: #292929;
-        }
+      li:nth-child(even) {
+        background-color: #292929;
+      }
 
-        .lap-number {
-            font-size: 1.2em;
-            font-weight: bold;
-            flex-basis: 15%;
-            color: #ffd700;
-        }
+      .driver-info {
+        display: flex;
+        align-items: center;
+      }
 
-        .driver-name {
-            font-size: 1.2em;
-            color: #fff;
-            flex-basis: 50%;
-        }
+      .driver-name {
+        font-size: 1.5em;
+        color: #ffffff;
+        flex-basis: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+      }
 
-        .lap-time {
-            font-size: 1.2em;
-            color: #ddd;
-            flex-basis: 30%;
-        }
+      .lap-time {
+        font-size: 1.5em;
+        color: #ddd;
+        flex-basis: 30%;
+      }
 
-        .winner {
-            background-color: #ccb800;
-        }
+      .time-difference {
+        font-size: 1.5em;
+        color: rgb(255, 0, 0);
+        flex-basis: 30%;
+        text-align: right;
+      }
 
-        img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 20px;
-        }
+      .winner {
+        font-size: 1.2em;
+        color: #ffd700;
+      }
+
+      .team-logo {
+        max-width: 40px;
+        margin-right: 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Race Results</h1>
     <p>Track: {{ track.name }}</p>
     <p>Track Length: {{ track.length }} km</p>
-    <p class="winner">Winner: {{ race_results[-1][0]['driver_name'] }}</p>
+    <p class="winner">Winner: {{ race_results[-1][0]['driver'].name }}</p>
 
-    <h2>Race Results</h2>
+    <h2>Driver Standings (Last Lap)</h2>
     <ul>
-        {% for lap in race_results %}
-            <li class="{% if loop.index == 1 %}winner{% endif %}">
-                <span class="lap-number">Lap {{ loop.index }}</span>
-                <span class="driver-name">{{ lap[0].driver_name }}</span>
-                <span class="lap-time">{{ lap[0].lap_time | format_lap_time }}</span>
-            </li>
-        {% endfor %}
+      {% for lap_result in race_results[-1] %}
+      <li>
+        <div class="driver-info">
+          <img
+            src="{{ url_for('static', filename='team_logos/' + lap_result['driver'].get_team_logo()) }}"
+            alt="Team Logo"
+            class="team-logo"
+          />
+          <span class="driver-name"
+            >{{ lap_result['driver'].name.split(' ')[-1][:3].upper() }}</span
+          >
+        </div>
+        <span
+          class="lap-time {% if loop.first %}full-time{% else %}partial-time{% endif %}"
+        >
+          {{ lap_result['lap_time'] | format_lap_time }}
+        </span>
+        {% if not loop.first %}
+        <span class="time-difference"
+          >+{{ '%0.3f'|format(lap_result['lap_time'] -
+          race_results[-1][0]['lap_time']) }}</span
+        >
+        {% endif %}
+      </li>
+      {% endfor %}
     </ul>
-
-    <!-- Add images from the static folder -->
-    <img src="{{ url_for('static', filename='practice_results.png') }}" alt="Practice Results">
-    <img src="{{ url_for('static', filename='qualifying_results.png') }}" alt="Qualifying Results">
-</body>
+  </body>
 </html>

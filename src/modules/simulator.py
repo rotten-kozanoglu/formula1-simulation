@@ -19,6 +19,21 @@ class Driver:
         self.best_lap_time = float('inf')
         self.driver_of_the_day_count = 0
         self.laps_led = 0
+            
+    def get_team_logo(self):
+        team_logos = {
+            "Mercedes": "Mercedes.png",
+            "Red Bull": "Red_Bull.png",
+            "Ferrari": "Ferrari.png",
+            "McLaren": "McLaren.png",
+            "Alpine": "Alpine.png",
+            "Aston Martin": "Aston_Martin.png",
+            "Williams": "Williams.png",
+            "Haas": "Haas.png",
+            "Alfa Romeo": "Alfa_Romeo.png",
+            "AlphaTauri": "AlphaTauri.png",
+        }
+        return team_logos.get(self.team, "Williams.png")
 
 class RaceSimulator:
     def __init__(self, tracks, drivers):
@@ -38,7 +53,7 @@ class RaceSimulator:
             lap_time = random.gauss(adjusted_lap_time, 1.5)
 
             results.append({
-                "driver_name": driver.name,
+                "driver": driver,  # Use the Driver instance instead of a dictionary
                 "lap_time": lap_time
             })
 
@@ -94,7 +109,7 @@ class RaceSimulator:
             lap_time = random.gauss(adjusted_lap_time, 1.0)
 
             results.append({
-                "driver_name": driver.name,
+                "driver": driver,  # Use the Driver instance instead of a dictionary
                 "lap_time": lap_time
             })
 
@@ -109,9 +124,9 @@ class RaceSimulator:
             minutes, seconds = divmod(lap_time, 60)
             lap_time_str = f"{int(minutes):02d}:{seconds:06.3f}"
 
-            print(f"  {result['driver_name']:<25} {lap_time_str}")
+            print(f"  {result['driver'].name:<25} {lap_time_str}")
 
-        driver_names = [result['driver_name'] for result in results]
+        driver_names = [result['driver'].name for result in results]
         driver_names.reverse()
         lap_times = [result['lap_time'] for result in results]
         lap_times.reverse()
@@ -142,31 +157,30 @@ class RaceSimulator:
             lap_times = []
 
             for driver_result in starting_grid:
-                driver_name = driver_result["driver_name"]
+                driver_instance = driver_result["driver"]
+                driver_name = driver_instance.name
                 tire_deg_factor = random.uniform(0.98, 1.02)
                 fuel_load_factor = 1 - (lap / laps) * 0.04
                 base_lap_time = (track.length / 206) * 3600 * tire_deg_factor * fuel_load_factor
 
-                driver_attributes = next((d for d in self.drivers if d.name == driver_name), None)
-                if driver_attributes:
-                    morale_factor = driver_attributes.morale / 10.0
-                    car_performance_factor = driver_attributes.car_performance / 10.0
+                morale_factor = driver_instance.morale / 10.0
+                car_performance_factor = driver_instance.car_performance / 10.0
 
-                    adjusted_lap_time = base_lap_time * (1 + (1 - morale_factor * car_performance_factor))
-                    lap_time = random.gauss(adjusted_lap_time, 1.0)
+                adjusted_lap_time = base_lap_time * (1 + (1 - morale_factor * car_performance_factor))
+                lap_time = random.gauss(adjusted_lap_time, 1.0)
 
-                    lap_times.append({
-                        "driver_name": driver_name,
-                        "lap_time": lap_time
-                    })
+                lap_times.append({
+                    "driver": driver_instance,
+                    "lap_time": lap_time
+                })
 
-                    if lap_time < driver_info[driver_name]["best_lap_time"]:
-                        driver_info[driver_name]["best_lap_time"] = lap_time
+                if lap_time < driver_info[driver_name]["best_lap_time"]:
+                    driver_info[driver_name]["best_lap_time"] = lap_time
 
-                    driver_positions[driver_name].append(driver_result["driver_name"])
+                driver_positions[driver_name].append(driver_instance)
 
-                    if driver_positions[driver_name][-1] == driver_name:
-                        driver_info[driver_name]["laps_led"] += 1
+                if driver_positions[driver_name][-1] == driver_instance:
+                    driver_info[driver_name]["laps_led"] += 1
 
             lap_times.sort(key=lambda x: x['lap_time'])
 
@@ -179,7 +193,8 @@ class RaceSimulator:
                 minutes, seconds = divmod(lap_time, 60)
                 lap_time_str = f"{int(minutes):02d}:{seconds:06.3f}"
 
-                print(f"{result['driver_name']:<25} {lap_time_str}")
+                print(f"{result['driver'].name:<25} {lap_time_str}")
+
 
             race_results.append(lap_times)
 
