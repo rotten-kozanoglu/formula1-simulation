@@ -26,9 +26,6 @@ def index():
     selected_track = random.choice(tracks)
     race_results = race_simulator.simulate_race(selected_track, selected_track.laps)
 
-    for lap_result in race_results[-1]:
-        lap_result['team_color'] = lap_result['driver'].get_team_color()
-
     return render_template('index.html', track=selected_track, race_results=race_results)
 
 if __name__ == '__main__':
