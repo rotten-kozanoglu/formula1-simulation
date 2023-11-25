@@ -3,3 +3,6 @@ statistics
 matplotlib
 json
 os  
+flask
+flask_cors
+flask_restful
