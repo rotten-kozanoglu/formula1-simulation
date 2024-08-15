@@ -6,6 +6,7 @@ from modules.data import tracks, drivers
 import random
 import os
 # test23441412412412123131313131321312312312312313123132
+#oewıfjwjefoqjwfıjwqpef
 app = Flask(__name__)
 
 race_simulator = RaceSimulator(tracks, drivers)
