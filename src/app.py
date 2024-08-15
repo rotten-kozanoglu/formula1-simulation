@@ -5,7 +5,7 @@ from modules.simulator import RaceSimulator, Track, Driver
 from modules.data import tracks, drivers
 import random
 import os
-
+# test
 app = Flask(__name__)
 
 race_simulator = RaceSimulator(tracks, drivers)
